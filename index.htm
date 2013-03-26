@@ -1,0 +1,42 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+	<meta http-equiv="content-type" content="text/html; charset=utf-8">
+	<link rel="stylesheet" href="style.css" type="text/css" media="screen" charset="utf-8">
+	<link href='http://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'>
+	<title>FixedAhoy!</title>
+	
+</head>
+<body>
+	<input type="text" id="email">
+	<input type="submit" value="Fetch Bugs Fixed" id="findContribs">
+	<div id="count"></div>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+	<script src="bz.js"></script>
+	<script type="text/javascript" charset="utf-8">
+		var bugzilla = bz.createClient();	
+
+		$('#findContribs').click(function(){
+
+			var email = $('#email').val();
+			var searchParams = {
+				email1_assigned_to:'1',
+				email1:email,
+				resolution:'FIXED',
+				email1_type:'equals_any',
+			}
+
+			//return if textfield is empty
+			if(email.length <= 0) { return; }
+
+			//show loading text
+			$('#count').empty().append('Loading...').addClass('muted');
+
+			bugzilla.countBugs(searchParams,function(msg, results){
+				$('#count').empty().append('Bugs Fixed : '+results).removeClass('muted');
+			})
+
+		})
+	</script>
+</body>
+</html>
